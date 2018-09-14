@@ -1,5 +1,5 @@
 /*
-  @brief   Circle
+  @brief   Example of a "Shell and Tube" geometry with linear extrusion
   @author  Sigve Karolius
 */
 // SetFactory("OpenCASCADE");
@@ -114,19 +114,22 @@ Color Gray{ Surface{ walls_shell[] }; }
 Color Magenta{ Surface{ outlets_tube[] }; }
 Color Red{ Surface{ outlets_shell[] }; }
 
-
 Color Gray50{ Volume{ volumes_shell[] }; }
 Color Green{ Volume{ volumes_tube[] }; }
 
 
 // Provide names of the physical entities
-Physical Surface("inlet")   = inlets_tube[];
-Physical Surface("outlet")  = outlets_tube[];
-Physical Surface("liquid_to_solid")  = walls_tube[];
+Physical Surface("inlet_shell")   = inlets_shell[];
+Physical Surface("outlet_shell")  = outlets_shell[];
+
+Physical Surface("inlet_tube")   = inlets_tube[];
+Physical Surface("outlet_tube")  = outlets_tube[];
+
+Physical Surface("tube_to_shell")  = walls_tube[];
 Physical Surface("walls") = walls_shell[];
 
-Physical Volume("liquid")   = volumes_tube[];
-Physical Volume("solid")    = volumes_shell[];
+Physical Volume("tube")   = volumes_tube[];
+Physical Volume("shell")    = volumes_shell[];
 
 
 Transfinite Surface "*";
@@ -135,4 +138,3 @@ Recombine Surface "*";
 // Vim 'modelines', standardise settings for the 'vim' text editor...
 // vim: filetype=gmsh fileencoding=ascii syntax=on colorcolumn=79
 // vim: ff=unix tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
-//+
