@@ -56,8 +56,8 @@ Function Square
   surfaces = news;  Plane Surface(surfaces) = l1;
 
   /* Mesh Generation ------------------------------------------------------- */
-  Transfinite Line{E, W} = 4;
-  Transfinite Line{S, N} = 4;
+  Transfinite Line{E, W} = Nwidth;
+  Transfinite Line{S, N} = Nwidth;
   Transfinite Surface{surfaces};
   Recombine Surface{surfaces};
 
