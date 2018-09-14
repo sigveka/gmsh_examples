@@ -3,7 +3,7 @@
 # Figures
 
 
-![geometry](fig/geometry.md)
+![geometry](fig/geometry.png)
 
 
 ![walls](fig/patches_walls.png)
