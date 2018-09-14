@@ -110,6 +110,8 @@ Color Magenta{ Surface{ inlets[] }; }
 Color Gray{ Surface{ walls[] }; }
 Color Cyan{ Surface{ outlets[] }; }
 
+Color Yellow{ Volume{ volumes[] }; }
+
 Physical Surface("bottom, patch") = inlets[];
 Physical Surface("atmosphere, patch")    = outlets[];
 Physical Volume("volume")  = volumes[];
