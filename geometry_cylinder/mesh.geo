@@ -77,6 +77,7 @@ outlets += surfaces[];
 Color Cyan{ Surface{ inlets[] }; }
 Color Gray{ Surface{ walls[] }; }
 Color Magenta{ Surface{ outlets[] }; }
+Color Yellow{ Volume{ volumes[] }; }
 
 // Generate surface patches with string labels.
 // Base patch types (patch, wall, symmetryPlane, empty, wedge, cyclic) can be
