@@ -8,7 +8,7 @@ gridsize = 0.1;
 
 L0 = 1;
 W0 = 1;
-N0 = 50;                                     // Number of "layers" in extrusion
+N0 = 5;                                      // Number of "layers" in extrusion
 E0 = 0.1;                                            // Length of the extrusion
 
 DefineConstant [
@@ -37,14 +37,15 @@ DefineConstant [
   llx = {ll0x*unit, Name "Input/Centre/x-coordinate"}
   lly = {ll0y*unit, Name "Input/Centre/y-coordinate"}
   llz = {ll0z*unit, Name "Input/Centre/z-coordinate"}
-  NLayers    = {   N0, Name "Input/Mesh/Layers"}
+  N        = {   N0, Name "Input/Mesh/Layers"}
+  Nwidth   = {   N0, Name "Input/Mesh/Width"}
 ];
 
-View "comments" {
-  // Add a text string in window coordinates, 10 pixels from the left and 10
-  // pixels from the bottom, using the StrCat function to concatenate strings:
-  T2(10, -10, 0 ){ StrCat("Created on ", Today, " with Gmsh") };
-};
+// View "comments" {
+//   // Add a text string in window coordinates, 10 pixels from the left and 10
+//   // pixels from the bottom, using the StrCat function to concatenate strings:
+//   T2(10, -10, 0 ){ StrCat("Created on ", Today, " with Gmsh") };
+// };
 
 inlets  = {};
 outlets = {};
@@ -54,7 +55,6 @@ vol_Si  = {};
 walls   = {};
 interfaces = {};
 
-N = 8;
 
 Include "../geo_templates/square.geo";
 // !!! ---------------- Do not edit below this line -------------------- !!! //
