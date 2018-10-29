@@ -87,9 +87,9 @@ Color Yellow{ Volume{ volumes[] }; }
 
 // You can also use numbers for physical region definition. The name will be
 // named "patch<number>"
-Physical Surface("inlet, patch") = inlets[];
-Physical Surface("outlet, patch")    = outlets[];
-Physical Surface("walls, wall")  = walls[];
+Physical Surface("inlet")  = inlets[];
+Physical Surface("outlet") = outlets[];
+Physical Surface("walls")  = walls[];
 
 // Generate volume with cellZone/cellSet definition.
 // Don't forget to make the entire volume defined because Gmsh writes only

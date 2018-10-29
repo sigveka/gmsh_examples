@@ -1,177 +1,189 @@
 /**
- @brief  File Generating a Circle
-
-
-          N
-
-          x
-        o   o
-  E   x   c   x   W
-        o   o
-          x
-
-          S
-
-Parameters:
-
-    cx
-    cy
-    cz
-    
-    Flag_Plane
-    
-    radius
-    
-    N -- longtitudal layers
-    Nang -- angular layers
-    Nrad -- radial layers
-
-Returns:
-  
-  produces list  'surface' with five elements:
-    s1                                // Center
-    s2                            // North East
-    s3                            // South East
-    s4                            // South West
-    s5                            // North West
-
-*/
+ * @brief  File Generating a Circle
+ * 
+ * 
+ *           N
+ * 
+ *           x
+ *         o   o
+ *   E   x   c   x   W
+ *         o   o
+ *           x
+ * 
+ *           S
+ * 
+ * Parameters:
+ * 
+ *     cx
+ *     cy
+ *     cz
+ *     
+ *     Flag_Plane
+ *     
+ *     radius
+ *     ratio
+ *     
+ *     N -- longtitudal layers
+ *     Nang -- angular layers
+ *     Nrad -- radial layers
+ * 
+ * Returns:
+ *   
+ *   produces list  'surface' with five elements:
+ *     s1                                // Center
+ *     s2                            // North East
+ *     s3                            // South East
+ *     s4                            // South West
+ *     s5                            // North West
+ * 
+**/
 
 
 // ========================================================================= //
 // Define Topology
 // ========================================================================= //
 Function OHCircle
-
-  // Flag_Plane = 0, 1 or 2;
-  // radius = 1;
-  // cx = 0; cy = 0; cz = 0; Center
-  
-  dR = 0.5*radius;
-  ri = 0.3*radius;
+  ratio = 0.6;
   lc = 0.1;
+  rot = 0;
   //Nrad = 5;
   //Nang = 7;
   
-  
-   P2x = cx;  P2y = cy;  P2z = cz;               // Coordinates for "East" node
-  Pi2x = cx; Pi2y = cy; Pi2z = cz;         // Coordinates for Inner "East" node
-   P3x = cx;  P3y = cy;  P3z = cz;              // Coordinates for "North" node
-  Pi3x = cx; Pi3y = cy; Pi3z = cz;        // Coordinates for Inner "North" node
-   P4x = cx;  P4y = cy;  P4z = cz;               // Coordinates for "West" node
-  Pi4x = cx; Pi4y = cy; Pi4z = cz;         // Coordinates for Inner "West" node
-   P5x = cx;  P5y = cy;  P5z = cz;              // Coordinates for "South" node
-  Pi5x = cx; Pi5y = cy; Pi5z = cz;        // Coordinates for Inner "South" node
-  P32x = cx; P32y = cy; P32z = cz;    // Coordinates for "North East" (NE) node
-  P54x = cx; P54y = cy; P54z = cz;    // Coordinates for "South West" (SW) node
-  P52x = cx; P52y = cy; P52z = cz;    // Coordinates for "South East" (SE) node
-  P34x = cx; P34y = cy; P34z = cz;    // Coordinates for "North West" (NW) node
-  
+
   /* Define Geometry ------------------------------------------------------- */
-  
-  If(Flag_Plane==0) // XY Plane
-     P2x += radius;  P3y += radius;
-     P4x -= radius;  P5y -= radius;
-  
-    Pi4x = P4x + dR; Pi5y = P5y + dR;
-    Pi2x = P2x - dR; Pi3y = P3y - dR;
-  
-    P32x += ri; P32y += ri;
-    P54x -= ri; P54y -= ri;
-    P52x += ri; P52y -= ri;
-    P34x -= ri; P34y += ri;
-  
-  ElseIf( Flag_Plane == 1 ) // XZ Plane
-  
-     P2x += radius;  P3z += radius;
-     P4x -= radius;  P5z -= radius;
-  
-    Pi4x = P4x + dR; Pi5z = P5z + dR;
-    Pi2x = P2x - dR; Pi3z = P3z - dR;
-  
-    P32x += ri; P32z += ri;
-    P54x -= ri; P54z -= ri;
-    P52x += ri; P52z -= ri;
-    P34x -= ri; P34z += ri;
-  
-  ElseIf( Flag_Plane == 2 ) // YZ Plane
 
-     P2y += radius;  P3z += radius;
-     P4y -= radius;  P5z -= radius;
+  // Coordinates for "Outer Circle"
+  O1x = cx;  O1y = cy;  O1z = cz;                // Coordinates for "East" node
+  O2x = cx;  O2y = cy;  O2z = cz;               // Coordinates for "North" node
+  O3x = cx;  O3y = cy;  O3z = cz;                // Coordinates for "West" node
+  O4x = cx;  O4y = cy;  O4z = cz;               // Coordinates for "South" node
+
+  // Coordinates for "Inner Circle"
+  I1x = cx;  I1y = cy;  I1z = cz;                // Coordinates for "East" node
+  I2x = cx;  I2y = cy;  I2z = cz;               // Coordinates for "North" node
+  I3x = cx;  I3y = cy;  I3z = cz;                // Coordinates for "West" node
+  I4x = cx;  I4y = cy;  I4z = cz;               // Coordinates for "South" node
+
+  // Coordinates for "Inner Square"
+  S1x = cx;  S1y = cy;  S1z = cz;                // Coordinates for "East" node
+  S2x = cx;  S2y = cy;  S2z = cz;               // Coordinates for "North" node
+  S3x = cx;  S3y = cy;  S3z = cz;                // Coordinates for "West" node
+  S4x = cx;  S4y = cy;  S4z = cz;               // Coordinates for "South" node
+
+
+  If(Flag_Plane==0)                          // XY Plane (extrude along Z-axis)
+    O1x += radius*Cos(  Pi/4 + rot); O1y += radius*Sin(  Pi/4 + rot);
+    O2x += radius*Cos(3*Pi/4 + rot); O2y += radius*Sin(3*Pi/4 + rot);
+    O3x += radius*Cos(5*Pi/4 + rot); O3y += radius*Sin(5*Pi/4 + rot);
+    O4x += radius*Cos(7*Pi/4 + rot); O4y += radius*Sin(7*Pi/4 + rot);
+
+    I1x += ratio*radius*Cos(  Pi/4 + rot); I1y += ratio*radius*Sin(  Pi/4 + rot);
+    I2x += ratio*radius*Cos(3*Pi/4 + rot); I2y += ratio*radius*Sin(3*Pi/4 + rot);
+    I3x += ratio*radius*Cos(5*Pi/4 + rot); I3y += ratio*radius*Sin(5*Pi/4 + rot);
+    I4x += ratio*radius*Cos(7*Pi/4 + rot); I4y += ratio*radius*Sin(7*Pi/4 + rot);
+
+    S1x += ratio*radius*Cos(rot);          S1y += ratio*radius*Sin(rot);
+    S2x += ratio*radius*Cos(Pi/2   + rot); S2y += ratio*radius*Sin(Pi/2   + rot);
+    S3x += ratio*radius*Cos(Pi     + rot); S3y += ratio*radius*Sin(Pi     + rot);
+    S4x += ratio*radius*Cos(3/2*Pi + rot); S4y += ratio*radius*Sin(3/2*Pi + rot);
+
+    ex = 0; ey = 0; ez = 1;
   
-    Pi4y = P4y + dR; Pi5z = P5z + dR;
-    Pi2y = P2y - dR; Pi3z = P3z - dR;
+  ElseIf (Flag_Plane==1)                     // XZ Plane (extrude along Y-axis)
+    O1x += radius*Cos(  Pi/4 + rot); O1z += radius*Sin(  Pi/4 + rot);
+    O2x += radius*Cos(3*Pi/4 + rot); O2z += radius*Sin(3*Pi/4 + rot);
+    O3x += radius*Cos(5*Pi/4 + rot); O3z += radius*Sin(5*Pi/4 + rot);
+    O4x += radius*Cos(7*Pi/4 + rot); O4z += radius*Sin(7*Pi/4 + rot);
+
+    I1x += ratio*radius*Cos(  Pi/4 + rot); I1z += ratio*radius*Sin(  Pi/4 + rot);
+    I2x += ratio*radius*Cos(3*Pi/4 + rot); I2z += ratio*radius*Sin(3*Pi/4 + rot);
+    I3x += ratio*radius*Cos(5*Pi/4 + rot); I3z += ratio*radius*Sin(5*Pi/4 + rot);
+    I4x += ratio*radius*Cos(7*Pi/4 + rot); I4z += ratio*radius*Sin(7*Pi/4 + rot);
+
+    S1x += ratio*radius*Cos(rot);          S1z += ratio*radius*Sin(rot);
+    S2x += ratio*radius*Cos(Pi/2   + rot); S2z += ratio*radius*Sin(Pi/2   + rot);
+    S3x += ratio*radius*Cos(Pi     + rot); S3z += ratio*radius*Sin(Pi     + rot);
+    S4x += ratio*radius*Cos(3/2*Pi + rot); S4z += ratio*radius*Sin(3/2*Pi + rot);
+
+    ex = 0; ey = 1; ez = 0;
   
-    P32y += ri; P32z += ri;
-    P54y -= ri; P54z -= ri;
-    P52y += ri; P52z -= ri;
-    P34y -= ri; P34z += ri;
-   Else
-     Abort;
+  ElseIf (Flag_Plane==2)                     // YZ Plane (extrude along X-axis)
+    O1y += radius*Cos(  Pi/4 + rot); O1z += radius*Sin(  Pi/4 + rot);
+    O2y += radius*Cos(3*Pi/4 + rot); O2z += radius*Sin(3*Pi/4 + rot);
+    O3y += radius*Cos(5*Pi/4 + rot); O3z += radius*Sin(5*Pi/4 + rot);
+    O4y += radius*Cos(7*Pi/4 + rot); O4z += radius*Sin(7*Pi/4 + rot);
+
+    I1y += ratio*radius*Cos(  Pi/4 + rot); I1z += ratio*radius*Sin(  Pi/4 + rot);
+    I2y += ratio*radius*Cos(3*Pi/4 + rot); I2z += ratio*radius*Sin(3*Pi/4 + rot);
+    I3y += ratio*radius*Cos(5*Pi/4 + rot); I3z += ratio*radius*Sin(5*Pi/4 + rot);
+    I4y += ratio*radius*Cos(7*Pi/4 + rot); I4z += ratio*radius*Sin(7*Pi/4 + rot);
+
+    S1y += ratio*radius*Cos(rot);          S1z += ratio*radius*Sin(rot);
+    S2y += ratio*radius*Cos(Pi/2   + rot); S2z += ratio*radius*Sin(Pi/2   + rot);
+    S3y += ratio*radius*Cos(Pi     + rot); S3z += ratio*radius*Sin(Pi     + rot);
+    S4y += ratio*radius*Cos(3/2*Pi + rot); S4z += ratio*radius*Sin(3/2*Pi + rot);
+
+    ex = 1; ey = 0; ez = 0;
+
   EndIf
+
+  center = newp; Point(center) = {cx,  cy, cz, lc};                   // Centre
   
-  /* Declare Points -------------------------------------------------------- */
+  // Declare points on the circle
+  o1 = newp; Point(o1) = {O1x, O1y, O1z, lc};                           // East
+  o2 = newp; Point(o2) = {O2x, O2y, O2z, lc};                          // North
+  o3 = newp; Point(o3) = {O3x, O3y, O3z, lc};                           // West
+  o4 = newp; Point(o4) = {O4x, O4y, O4z, lc};                          // South
   
-  center = newp; Point(center) = {cx,  cy,  cz, lc};                // "Centre"
+  s1 = newp; Point(s1) = { S1x, S1y, S1z, lc};                          // East
+  s2 = newp; Point(s2) = { S2x, S2y, S2z, lc};                         // North
+  s3 = newp; Point(s3) = { S3x, S3y, S3z, lc};                          // West
+  s4 = newp; Point(s4) = { S4x, S4y, S4z, lc};                         // South
   
-  // Outer Circle
-  p2 = newp; Point(p2) = {P3x, P3y, P3z, lc};                        // "North"
-  p3 = newp; Point(p3) = {P2x, P2y, P2z, lc};                         // "East"
-  p4 = newp; Point(p4) = {P4x, P4y, P4z, lc};                         // "West"
-  p5 = newp; Point(p5) = {P5x, P5y, P5z, lc};                        // "South"
-
-  o2 = newp; Point(o2) = {P32x, P32y, P32z, lc};                // "North East"
-  o3 = newp; Point(o3) = {P52x, P52y, P52z, lc};                // "South East"
-  o4 = newp; Point(o4) = {P54x, P54y, P54z, lc};                // "South West"
-  o5 = newp; Point(o5) = {P34x, P34y, P34z, lc};                // "North West"
-
-  // Inner 'Square'
-  x2 = newp; Point(x2) = {Pi3x, Pi3y, Pi3z, lc};                     // "North"
-  x3 = newp; Point(x3) = {Pi2x, Pi2y, Pi2z, lc};                      // "East"
-  x4 = newp; Point(x4) = {Pi4x, Pi4y, Pi4z, lc};                      // "West"
-  x5 = newp; Point(x5) = {Pi5x, Pi5y, Pi5z, lc};                     // "South"
-
-  /* Declare Lines --------------------------------------------------------- */
-
-  // Outer Circle
-  lp1 = newl; Circle(lp1) = {p2, center, p3};                 // North --> East
-  lp2 = newl; Circle(lp2) = {p3, center, p5};                 // East --> South
-  lp3 = newl; Circle(lp3) = {p5, center, p4};                 // South --> West
-  lp4 = newl; Circle(lp4) = {p4, center, p2};                 // West --> North
-
-  // Inner Sqare
-  lx1 = newl; Circle(lx1) = {x2, o4, x3};                     // North --> East
-  lx2 = newl; Circle(lx2) = {x3, o5, x5};                     // East --> South
-  lx3 = newl; Circle(lx3) = {x5, o2, x4};                     // South --> West
-  lx4 = newl; Circle(lx4) = {x4, o3, x2};                     // West --> North
-
-  // Connecting Inner and Outer Circle
-  l1 = newl; Line(l1) = {x2, p2};            // North (inner) --> North (outer)
-  l2 = newl; Line(l2) = {x3, p3};            // East  (inner) --> East  (outer)
-  l3 = newl; Line(l3) = {x4, p4};            // West  (inner) --> West  (outer)
-  l4 = newl; Line(l4) = {x5, p5};            // South (inner) --> South (outer)
-
+  // Declare Points for the inner square
+  i1 = newp; Point(i1) = {I1x, I1y, I1z, lc};                           // East
+  i2 = newp; Point(i2) = {I2x, I2y, I2z, lc};                          // North 
+  i3 = newp; Point(i3) = {I3x, I3y, I3z, lc};                           // West
+  i4 = newp; Point(i4) = {I4x, I4y, I4z, lc};                          // South
+  
+  // Declare Lines
+  a1 = newl; Circle(a1) = {o1, center, o2};
+  r1 = newl; Line(r1)   = {i2, o2};
+  a2 = newl; Circle(a2) = {i2, s4, i1}; 
+  r2 = newl; Line(r2)   = {i1, o1};
+  
+  a3 = newl; Circle(a3) = {o2, center, o3};
+  r3 = newl; Line(r3)   = {i3, o3};
+  a4 = newl; Circle(a4) = {i3, s1, i2};
+  
+  a5 = newl; Circle(a5) = {o3, center, o4};
+  r4 = newl; Line(r4)   = {i4, o4};
+  a6 = newl; Circle(a6) = {i4, s2, i3};
+  
+  a7 = newl; Circle(a7) = {o4, center, o1};
+  a8 = newl; Circle(a8) = {i1, s3, i4};
+  
   /* Define Topology ------------------------------------------------------- */
+  
+  ll0 = newll; Line Loop(ll0) = {-a2, -a4, -a6, -a8};
+  
+  ll1 = newll; Line Loop(ll1) = {a1, -r1, a2, r2};            // North Quadrant
+  ll2 = newll; Line Loop(ll2) = {a3, -r3, a4, r1};             // West Quadrant
+  ll3 = newll; Line Loop(ll3) = {a5, -r4, a6, r3};            // South Quadrant
+  ll4 = newll; Line Loop(ll4) = {a7, -r2, a8, r4};             // East Quadrant
+  
+  s0 = news; Plane Surface(s0) = {ll0};
+  s1 = news; Plane Surface(s1) = {ll1};
+  s2 = news; Plane Surface(s2) = {ll2};
+  s3 = news; Plane Surface(s3) = {ll3};
+  s4 = news; Plane Surface(s4) = {ll4};
+  
+  surfaces = {s0, s1, s2, s3, s4};
+  
+  /* Mesh Generation ------------------------------------------------------- */
+  Transfinite Line{r1, r2,  r3, r4} = Nrad + 1 Using Progression 0.9;
+  Transfinite Line{a1, a2, a3, a4, a5, a6, a7, a8} = Nang + 1 Using Bump 1;
 
-  f1 = newll; Line Loop(f1) = {lx1, lx2, lx3,  lx4};            // Inner Square
-  f2 = newll; Line Loop(f2) = {l1,  lp1, -l2, -lx1};     // North East Quadrant
-  f3 = newll; Line Loop(f3) = {l2,  lp2, -l4, -lx2};     // South East Quadrant
- // f4 = newll; Line Loop(f4) = {l4,  lp3, -l3, -lx3};     // South West Quadrant
- // f5 = newll; Line Loop(f5) = {l3,  lp4, -l1, -lx4};     // North West Quadrant
-  f4 = newll; Line Loop(f4) = { l4,  lp3, -l3, -lx3};    // South West Quadrant
-  f5 = newll; Line Loop(f5) = { l3,  lp4, -l1, -lx4};    // North West Quadrant
-  
-  // Declare Surfaces
-  s1 = news; Plane Surface(s1) = {f1};                                // Center
-  s2 = news; Plane Surface(s2) = {f2};                            // North East
-  s3 = news; Plane Surface(s3) = {f3};                            // South East
-  s4 = news; Plane Surface(s4) = {f4};                            // South West
-  s5 = news; Plane Surface(s5) = {f5};                            // North West
-  
-  Transfinite Line{l1, l2, l3, l4} = Nrad + 1 Using Progression 0.9; // Radial Grid Points
-  Transfinite Line{lp1, lp2, lp3, lp4, lx1, lx2, lx3, lx4} = Nang + 1; // Angular Grid Points
-  
-  surfaces = {s1, s2, s3, s4, s5};
 
   /* Mesh Generation ------------------------------------------------------- */
   Transfinite Surface{surfaces};
@@ -205,13 +217,13 @@ Function LinearExtrusionOHCircle
   outerwalls = {};
 
   If( Flag_Plane == 0 ) // XY Plane -- Z direction
-    ex = 0; ey = 0; ez = 1;
+    lx = 0; ly = 0; lz = len;
   
   ElseIf( Flag_Plane == 1 ) // XZ Plane -- Y direction
-    ex = 0; ey = 1; ez = 0;
+    lx = 0; ly = len; lz = 0;
 
   ElseIf ( Flag_Plane == 2 ) // YZ Plane => X direction
-    ex = 1; ey = 0; ez = 0;
+    lx = len; ly = 0; lz = 0;
 
   Else
     Abort; // or Error or Exit ==> Abort current script or Exit GMSH
@@ -219,7 +231,7 @@ Function LinearExtrusionOHCircle
   
   /* ----------------------------------------------------------------------- */
   For i In {0:4} // There are five surfaces in the OH circle  
-    out[] = Extrude {ex*len, ey*len, ez*len} {//  Outer: 3, Inner: 5, Sides: 2 and 4
+    out[] = Extrude {lx, ly, lz} {//  Outer: 3, Inner: 5, Sides: 2 and 4
       Surface{surfaces[i]};
       Layers{N};
       Recombine;
@@ -230,8 +242,8 @@ Function LinearExtrusionOHCircle
     If( i == 0 ) // The "inner square" is always surface number Zero
       innerwalls += {out[2], out[3], out[4], out[5]};
     Else
-      outerwalls += {out[3]};
-      innerwalls += {out[2], out[4], out[5]};
+      outerwalls += {out[2]};
+      innerwalls += {out[3], out[4], out[5]};
     EndIf
 
   EndFor
@@ -248,15 +260,15 @@ Function ElbowExtrusionOHCircle
   
   If(Flag_Plane == 0) // XY Plane
     Printf("  Starting in the XY Plane");
-    X = 1;  Y = 0;  Z = 0;                           // rotation axis direction
-    x = 1;  y = stop;  z = start;             // one point on the rotation axis
+    X = 1;  Y = 0;  Z = 0;                             // rotation axis direction
+    x = 1;  y = stop;  z = start;               // one point on the rotation axis
   
     If ( Flag_Plane_Bend == 1 )
       Printf("  Ending in XY Plane");
       X = 1;  Y = 0;   Z = 0;                        // rotation axis direction
-      x = 0;  y = start;  z = stop;                 // one point on the rotation axis
+      x = 0;  y = 12;  z = 2;             // one point on the rotation axis
   
-      If ( len > 0 )
+      If ( length > 0 )
         Printf("  Positive extrusion direction implies negative angle");
         angle = -Pi/2; // rotation angle
       Else
@@ -271,10 +283,10 @@ Function ElbowExtrusionOHCircle
     Printf("  Starting in the XZ Plane");
     If ( Flag_Plane_Bend == 0 )
       Printf("  Ending in XY Plane");
-      X = 1;  Y = 0;   Z = 0;                        // rotation axis direction
-      x = 0;  y = start;  z = stop;           // one point on the rotation axis
+      X = 1;  Y = 0;   Z = 0;                             // rotation axis direction
+        x = 0;  y = start;  z = stop;               // one point on the rotation axis
   
-      If ( len > 0 )     // Determine rotation direction based on sign of "len"
+      If ( length > 0 )
         Printf("  Positive extrusion direction implies negative angle");
         angle = Pi/2; // rotation angle
       Else
@@ -282,7 +294,6 @@ Function ElbowExtrusionOHCircle
         angle = -Pi/2; // rotation angle
       EndIf
   
-      Update_Flag_Plane = 0;
     EndIf
   
     Update_Flag_Plane = 0;
@@ -293,6 +304,8 @@ Function ElbowExtrusionOHCircle
     Update_Flag_Plane = 2;
   EndIf
   
+
+
 
   For i In {0:4}
 

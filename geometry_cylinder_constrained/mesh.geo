@@ -20,7 +20,7 @@ cx0 = 0; cy0 = 0; cz0 = 0;
 
 
 DefineConstant [
-  Flag_Plane = {0, Choices{0="XY", 1="XZ", 2="YZ"},
+  Flag_Plane = {2, Choices{0="XY", 1="XZ", 2="YZ"},
                 Name "Input/00Plane", Highlight "Blue"}
   Flag_Unit  = {2, Choices{0="mm", 1="cm", 2="m", 3="km"},
                         Name "Input/01Unit", Highlight "Blue"}
@@ -72,13 +72,9 @@ inlets += surfaces[];
 Call LinearExtrusionOHCircle;
 volumes += newVol[];
  
-cx = 0; cy = 0; cz = len;
-lz = 0.5*len;
 Call LinearExtrusionOHCircle;
 volumes += newVol[];
 walls   += outerwalls[];
- 
-cx = 0; cy = 0; cz = len + lz;
  
 Call LinearExtrusionOHCircle;
 volumes += newVol[];
@@ -86,7 +82,7 @@ outlets += surfaces[];
 
 // ---------- Create Outer Shell
 
-cx = 0; cy = 0; cz = 0;
+cx = cz0; cy = cy0; cz = cx0;
 Call CircleShellCircleCore;
 inlets += surfaces[];
 
@@ -95,7 +91,9 @@ volumes += newVol[];
 walls   += outerwalls[];
 walls   += surfaces[];
 
-cx = 0; cy = 0; cz = len + lz;
+// cx = 0; cy = 0; cz = len + lz; // for XY plane (extrusion in Z-direction)
+cz = 0; cy = 0; cx = len + lx; // for YZ plane (extrusion in X-dicection)
+//cz = 0; cx = 0; cy = len + ly; // XZ
 Call CircleShellCircleCore;
 walls += surfaces[];
 
@@ -112,10 +110,10 @@ Color Cyan{ Surface{ outlets[] }; }
 
 Color Yellow{ Volume{ volumes[] }; }
 
-Physical Surface("bottom, patch") = inlets[];
-Physical Surface("atmosphere, patch")    = outlets[];
+Physical Surface("bottom") = inlets[];
+Physical Surface("atmosphere")    = outlets[];
 Physical Volume("volume")  = volumes[];
-Physical Surface("walls, wall")  = walls[];
+Physical Surface("walls")  = walls[];
 
 Transfinite Surface "*";
 Recombine Surface "*";

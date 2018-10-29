@@ -67,7 +67,7 @@ For i In {1:8}
   surfaces = top[];
   walls   += {right, left, front, back};
   If ( i != 8 )
-    Physical Surface( Sprintf("Ge_%g_to_Si_%g patch", i, i - 1) ) = surfaces[];
+    // Physical Surface( Sprintf("Ge_%g_to_Si_%g patch", i, i - 1) ) = surfaces[];
   EndIf
   If (i % 2) // Odd number
     Physical Volume( Sprintf("Si_%g", i)) = newVol[];
