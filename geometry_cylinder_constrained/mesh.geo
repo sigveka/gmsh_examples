@@ -10,8 +10,8 @@ R = 0.5;        // Radius of the tube
 DR = 0.5*R;     // Shell radius
 
 lc = 0.1;
-N0  = 3;
-N0a = 5;
+N0  = 3; // Number of meshed layers in "extruced" geometry
+N0a = 5; // Number of 
 N0r = 7;
 L = 1.0;
 
@@ -72,7 +72,8 @@ inlets += surfaces[];
 Call LinearExtrusionOHCircle;
 volumes += newVol[];
  
-Call LinearExtrusionOHCircle;
+
+Call LinearExtrusionOHCircle; // Middle "pipe"
 volumes += newVol[];
 walls   += outerwalls[];
  
@@ -91,10 +92,12 @@ volumes += newVol[];
 walls   += outerwalls[];
 walls   += surfaces[];
 
-// cx = 0; cy = 0; cz = len + lz; // for XY plane (extrusion in Z-direction)
-cz = 0; cy = 0; cx = len + lx; // for YZ plane (extrusion in X-dicection)
-//cz = 0; cx = 0; cy = len + ly; // XZ
-Call CircleShellCircleCore;
+// cx = 0; cy = 0; cz = lz; // for XY plane (extrusion in Z-direction)
+cz = 0; cy = 0; cx = lx; // for YZ plane (extrusion in X-dicection)
+//cz = 0; cx = 0; cy = ly; // XZ
+surfaces[] = Translate { cx, cy, cz } {
+  Duplicata { Surface { surfaces[] }; }
+};
 walls += surfaces[];
 
 Call LinearExtrusionCircleShell;
