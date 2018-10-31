@@ -4,6 +4,7 @@
 */
 //SetFactory("OpenCASCADE");
 
+Geometry.CopyMeshingMethod = 1;  // Enable MESH method copying upon translation
 
 /* Define Geometry Parameters ---------------------------------------------- */
 R = 0.5;        // Radius of the tube
@@ -72,7 +73,6 @@ inlets += surfaces[];
 Call LinearExtrusionOHCircle;
 volumes += newVol[];
  
-
 Call LinearExtrusionOHCircle; // Middle "pipe"
 volumes += newVol[];
 walls   += outerwalls[];
@@ -95,6 +95,7 @@ walls   += surfaces[];
 // cx = 0; cy = 0; cz = lz; // for XY plane (extrusion in Z-direction)
 cz = 0; cy = 0; cx = lx; // for YZ plane (extrusion in X-dicection)
 //cz = 0; cx = 0; cy = ly; // XZ
+
 surfaces[] = Translate { cx, cy, cz } {
   Duplicata { Surface { surfaces[] }; }
 };
